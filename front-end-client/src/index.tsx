@@ -6,13 +6,17 @@ import Router from './app/routes';
 import {
   RouterProvider
 } from "react-router-dom";
+import { ThemeProvider } from '@mui/material';
+import theme from './app/theme/theme';
 
 const root = ReactDOM.createRoot(
   document.getElementById('root') as HTMLElement
 );
 root.render(
   <React.StrictMode>
-    <RouterProvider router={Router} />
+    <ThemeProvider theme={theme}>
+      <RouterProvider router={Router} />
+    </ThemeProvider>
   </React.StrictMode>
 );
 
