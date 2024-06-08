@@ -12,3 +12,21 @@ datasource db {
   provider = "mysql"
   url      = env("DATABASE_URL")
 }
+
+model Usuario {
+  id      Int    @id @default(autoincrement())
+  nome_usuario    String
+  email   String
+  senha   String
+  tipo_usuario TipoUsuario? @relation(fields: [id_tipo_usuario],references: [id])
+  id_tipo_usuario Int
+  @@map("usuarios")
+}
+
+model TipoUsuario {
+  id      Int    @id @default(autoincrement())
+  nome    String
+  parametro_edit_config Boolean
+  usuario Usuario[]
+  @@map("tipo_usuarios")
+}
