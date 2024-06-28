@@ -1,9 +1,48 @@
+import dotenv from "dotenv";
+dotenv.config();
 import { validate } from "email-validator";
 import { CreateUsuarioRepositorie,TipoUsuario,Usuario } from "../repositories/usuarioRepositorie"
 import { cpf } from 'cpf-cnpj-validator'; 
-import { hash } from "bcryptjs";
+import { compare, hash } from "bcryptjs";
+import { sign } from "jsonwebtoken";
 
 class CreateUsuarioService{
+    async logarUsuario(email:string,senha:string){
+        const usuarioRepositorie = new CreateUsuarioRepositorie()
+
+        const emailExiste = await usuarioRepositorie.verficarEmailExiste(email);
+
+        if(!emailExiste){
+            throw new Error('Email não esta em uso');
+        }
+
+        const dbUsuario = await usuarioRepositorie.pegarUsuarioEmail(email);
+
+        const senhaCorreta = await compare(senha,dbUsuario!.senha)
+
+        if(!senhaCorreta){
+            throw new Error('Email ou Senha Inválidos');
+        }
+
+        const chaveSecreta = process.env.SECRET_KEY
+        
+        const token = sign({
+            nomeUsuario:dbUsuario?.nome_usuario,
+            nomeCompleto:dbUsuario?.nome_completo,
+            email:dbUsuario?.email,
+            idUsuario:dbUsuario?.id,
+            idTipoUsuario:dbUsuario?.id_tipo_usuario
+        },chaveSecreta!,{
+            expiresIn:'30d'
+        })
+
+        return {
+            nomeUsuario:dbUsuario?.nome_completo,
+            nomeCompleto:dbUsuario?.nome_completo,
+            token:token
+        }
+    }
+
     async criarTipoUsuario(tipoUsuario:TipoUsuario){
         const usuarioRepositorie = new CreateUsuarioRepositorie();
 

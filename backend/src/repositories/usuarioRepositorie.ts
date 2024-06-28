@@ -29,6 +29,16 @@ class CreateUsuarioRepositorie{
             data:usuario
         })
     }
+    //GET
+    async pegarUsuarioEmail(email:string){
+        const dbResponse = await prisma.usuario.findFirst({
+            where:{
+                email:email
+            }
+        })
+        
+        return dbResponse
+    }
 
     //VERIFICAÇOES
     
