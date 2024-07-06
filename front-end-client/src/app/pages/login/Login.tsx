@@ -1,5 +1,6 @@
 import { Box, Button, Divider, Paper, TextField, Typography, styled } from '@mui/material'
-import React, { useState } from 'react'
+import React, { FormEvent, useContext, useState } from 'react'
+import { AppContext } from '../shared/contexts/AppContext'
 
 const Background = styled('div')({
     display:'flex',
@@ -24,7 +25,8 @@ const LoginPaper = styled(Paper)({
     padding:'40PX',
     textAlign:'center',
     borderRadius:'10px',
-    boxShadow:'0px 4px 8px rgba(0,0,0,0.8)'
+    boxShadow:'0px 4px 8px rgba(0,0,0,0.8)',
+    border:'2px solid #019C9B'
 })
 
 const InputBox = styled(Box)({
@@ -32,19 +34,19 @@ const InputBox = styled(Box)({
 })
 
 export const Login = () => {
+    const {logar} = useContext(AppContext)
     const [email,setEmail] = useState('');
     const [senha,setSenha] = useState('');
 
-    const handleLogar = () => {
-        alert(email+' + '+senha)
+    const handleLogar = async (e:FormEvent) => {
+        e.preventDefault();
+        await logar(email,senha)
     }
 
   return (
     <Background>
         <Container>
-            <Typography variant="h4" component="h1" color='textSecondary'>
-                    LOGO
-            </Typography>
+            <img src="assets/img/logo.png" alt="Logo" width={200} height={170}/>
             <LoginPaper>
                 <Typography variant="h5" component="h1" color='textSecondary'>
                     LOGIN

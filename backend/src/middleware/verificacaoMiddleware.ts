@@ -20,7 +20,7 @@ export const verificacaoToken = (req:Request,res:Response,next:NextFunction) =>{
         return next()
        
     } catch (error) {
-        return res.status(500).json({message:"Usuário Não Altorizado"})
+        return res.status(500).json({message:"Usuário Não Autorizado"})
     }
 
 } 
