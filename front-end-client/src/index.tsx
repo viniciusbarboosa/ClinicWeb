@@ -8,7 +8,7 @@ import {
 } from "react-router-dom";
 import { ThemeProvider } from '@mui/material';
 import theme from './app/theme/theme';
-import { AppProvider } from './app/pages/shared/contexts/AppContext';
+import { AppProvider } from './app/shared/contexts/AppContext';
 
 const root = ReactDOM.createRoot(
   document.getElementById('root') as HTMLElement

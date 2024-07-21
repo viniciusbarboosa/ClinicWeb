@@ -1,6 +1,7 @@
 import { Box, Button, Divider, Paper, TextField, Typography, styled } from '@mui/material'
 import React, { FormEvent, useContext, useState } from 'react'
-import { AppContext } from '../shared/contexts/AppContext'
+import { AppContext } from '../../shared/contexts/AppContext'
+import Alert from '@mui/material/Alert';
 
 const Background = styled('div')({
     display:'flex',
@@ -37,10 +38,18 @@ export const Login = () => {
     const {logar} = useContext(AppContext)
     const [email,setEmail] = useState('');
     const [senha,setSenha] = useState('');
+    const [error,setError] = useState(false);
+    const [textoError,setTextoError] = useState('');
 
     const handleLogar = async (e:FormEvent) => {
         e.preventDefault();
-        await logar(email,senha)
+        const response = await logar(email,senha);
+
+        if(response){
+            setTextoError(response)
+            setError(true);
+        }
+
     }
 
   return (
@@ -55,6 +64,9 @@ export const Login = () => {
                     margin:'20px 0px'
                 }}/>
                 <form onSubmit={handleLogar}>
+                <InputBox>
+                    {error && <Alert severity="error">{textoError}</Alert>}
+                </InputBox>
                 <InputBox>    
                     <TextField label="Email" variant="outlined" type='email' fullWidth value={email} onChange={(e)=>{setEmail(e.target.value)}}/>
                 </InputBox>

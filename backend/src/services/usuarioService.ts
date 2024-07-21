@@ -39,7 +39,7 @@ class CreateUsuarioService{
         return {
             nomeUsuario:dbUsuario?.nome_completo,
             nomeCompleto:dbUsuario?.nome_completo,
-            idTipoUsuario:dbUsuario.id_tipo_usuario,
+            idTipoUsuario:dbUsuario?.id_tipo_usuario,
             token:token
         }
     }
