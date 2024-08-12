@@ -1,7 +1,7 @@
 import dotenv from "dotenv";
 dotenv.config();
 import { Request,Response,NextFunction } from "express";
-import { verify } from "jsonwebtoken";
+import { verify,JwtPayload } from "jsonwebtoken";
 
 export const verificacaoToken = (req:Request,res:Response,next:NextFunction) =>{
     const tokenAcesso = req.headers.authorization
@@ -16,7 +16,9 @@ export const verificacaoToken = (req:Request,res:Response,next:NextFunction) =>{
     try {
         const chaveSecreta = process.env.SECRET_KEY
         const dadosToken = verify(token,chaveSecreta!)
-        console.log(dadosToken)
+        
+        req.idUsuario = (dadosToken as JwtPayload).idUsuario
+        
         return next()
        
     } catch (error) {

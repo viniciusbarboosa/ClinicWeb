@@ -7,6 +7,18 @@ import { compare, hash } from "bcryptjs";
 import { sign } from "jsonwebtoken";
 
 class CreateUsuarioService{
+    async pegarMeuUsuarioId(id:number){
+        const usuarioRepositorie = new CreateUsuarioRepositorie()
+
+        const dbUsuario = await usuarioRepositorie.pegarUsuarioId(id);
+
+        return {
+            nomeUsuario:dbUsuario?.nome_usuario,
+            nomeCompleto:dbUsuario?.nome_completo,
+            idTipoUsuario:dbUsuario?.id_tipo_usuario
+        }
+    }
+
     async logarUsuario(email:string,senha:string){
         const usuarioRepositorie = new CreateUsuarioRepositorie()
 
@@ -37,7 +49,7 @@ class CreateUsuarioService{
         })
 
         return {
-            nomeUsuario:dbUsuario?.nome_completo,
+            nomeUsuario:dbUsuario?.nome_usuario,
             nomeCompleto:dbUsuario?.nome_completo,
             idTipoUsuario:dbUsuario?.id_tipo_usuario,
             token:token

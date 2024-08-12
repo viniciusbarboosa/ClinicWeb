@@ -2,6 +2,22 @@ import { Request,Response } from "express"
 import { CreateUsuarioService } from "../services/usuarioService"
 
 class CreateUsuarioController{
+    async pegarMeuUsuario(req:Request,res:Response){
+        const idUsuario = req.idUsuario
+        const usuarioService = new CreateUsuarioService() 
+
+        try {
+            const response = await usuarioService.pegarMeuUsuarioId(idUsuario);
+            res.status(200).json({usuario:response})
+        } catch (error) {
+            if(error instanceof Error){
+                res.status(400).json({message:error.message})
+            }else{
+                res.status(400).json({message:"Erro ao criar Usuário"})
+            }
+        }
+    }
+
     async logarUsuario(req:Request,res:Response){
         const usuarioService = new CreateUsuarioService()   
         const {email,senha} = req.body

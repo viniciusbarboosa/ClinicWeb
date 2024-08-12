@@ -1,12 +1,11 @@
-import { ReactNode, createContext, useState } from "react";
+import { ReactNode, createContext, useEffect, useState } from "react";
 import { api } from "../api/api";
-import { destroyCookie, setCookie } from "nookies";
+import { destroyCookie, parseCookies, setCookie } from "nookies";
 
 type Usuario = {
     nomeUsuario:string,
     nomeCompleto:string,
-    idTipoUsuario:number,
-    token:string
+    idTipoUsuario:number
 }
 
 type AppContextData = {
@@ -23,6 +22,29 @@ type AppProviderData = {
 export const AppContext = createContext({} as AppContextData)
 
 export const AppProvider = ({children}:AppProviderData) =>{
+    useEffect(()=>{
+        const pegarUsuarioId = async () => {
+            try {
+                const response = await api.get('api/usuarios/meuUsuarioId')  
+
+                setUsuario({
+                    nomeUsuario:response.data.usuario.nomeUsuario,
+                    nomeCompleto:response.data.usuario.nomeCompleto,
+                    idTipoUsuario:response.data.usuario.idTipoUsuario
+                })
+            } catch (error) {
+                deslogar()
+            }
+        }
+
+        const cookies = parseCookies()
+        
+        if(cookies['@clinicWeb.token']){
+            pegarUsuarioId()
+        }
+            
+    },[])
+
     const [usuario,setUsuario] = useState<Usuario>();
     const logado = Boolean(usuario);
 
@@ -31,13 +53,6 @@ export const AppProvider = ({children}:AppProviderData) =>{
             const response = await api.post('api/usuarios/logarUsuario', {
                 email:email,
                 senha:senha
-            })
-            
-            setUsuario({
-                nomeUsuario:response.data.usuario.nomeUsuario,
-                nomeCompleto:response.data.usuario.nomeCompleto,
-                idTipoUsuario:response.data.usuario.idTipoUsuario,
-                token:response.data.usuario.token
             })
 
             setCookie(null, '@clinicWeb.token',response.data.usuario.token, {

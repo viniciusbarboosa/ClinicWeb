@@ -6,7 +6,8 @@ import CssBaseline from '@mui/material/CssBaseline';
 import Toolbar from '@mui/material/Toolbar';
 import Typography from '@mui/material/Typography';
 import Divider from '@mui/material/Divider';
-
+import { AppContext } from '../../shared/contexts/AppContext';
+import { useContext } from 'react';
 
 //UTILS
 import { Outlet } from "react-router-dom";
@@ -18,13 +19,14 @@ import { Lista2 } from './Listas/Lista2';
 const drawerWidth = 240;
 
 export function Dashboard() {
+  const {usuario} = useContext(AppContext)
   return (
     <Box sx={{ display: 'flex' }}>
       <CssBaseline />
       <AppBar position="fixed" color="secondary" sx={{ zIndex: (theme) => theme.zIndex.drawer + 1 }}>
         <Toolbar>
           <Typography variant="h6" noWrap component="div">
-            Clipped drawer
+             Nome Usuario : {usuario?.nomeUsuario}
           </Typography>
         </Toolbar>
       </AppBar>
